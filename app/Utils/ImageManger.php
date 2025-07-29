@@ -19,7 +19,6 @@ class ImageManger{
                 ]);
             }
         }
-
         // upload single image
         if($request->hasFile('image')){
             $image = $request->file('image');

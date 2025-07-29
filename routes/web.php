@@ -17,7 +17,7 @@ Route::redirect('/', '/home');
 
 Route::group(['as' => 'frontend.'], function () {
     Route::get('/home', HomeController::class)->name('index');
-    Route::post('news-subscribe',NewsSubscriberController::class)->name('news.subscribe');
+    Route::post('news-subscribe', NewsSubscriberController::class)->name('news.subscribe');
     Route::get('category/{category:slug}', CategoryController::class)->name('category.posts');
 
     Route::get('post/{post:slug}', [PostController::class, 'show'])->name('post.show');
@@ -61,7 +61,6 @@ Route::group(['as' => 'frontend.'], function () {
 
 });
 
-
 Route::prefix('email')->name('verification.')->controller(VerificationController::class)
     ->group(function () {
         Route::get('/verify', 'show')->name('notice');
@@ -71,3 +70,4 @@ Route::prefix('email')->name('verification.')->controller(VerificationController
 
 Auth::routes();
 
+require __DIR__.'../admin.php';
