@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Category;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('can:categories');
+        $this->middleware('can:categories');
     }
     public function index()
     {
@@ -69,10 +68,9 @@ class CategoryController extends Controller
         //
     }
 
-    public function update(CategoryRequest $request, string $id)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $category = Category::findOrFail($id);
-        $category = $category->update($request->except(['_token' , '_method']));
+        $category->update($request->except(['_token' , '_method']));
         if(!$category){
             Session::flash('error', ' Try Again Latter!');
             return redirect()->route('admin.categories.index');
@@ -83,10 +81,8 @@ class CategoryController extends Controller
     }
 
 
-    public function changeStatus($id)
+    public function changeStatus(Category $category)
     {
-        $category = Category::findOrFail($id);
-
         if ($category->status == 1) {
             $category->update([
                 'status' => 0,
@@ -101,11 +97,9 @@ class CategoryController extends Controller
         return redirect()->back();
     }
 
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
-
         Session::flash('success', 'Category Deleted Suuccessfully!');
         return redirect()->route('admin.categories.index');
     }

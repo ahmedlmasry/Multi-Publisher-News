@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\Post\PostController;
 use App\Http\Controllers\Admin\Profile\ProfileController;
 use App\Http\Controllers\Admin\Setting\RelatedSiteController;
 use App\Http\Controllers\Admin\Setting\SettingController;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CheckAdminStatus;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,12 +68,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
     Route::resource('admins',              AdminController::class);
     Route::resource('related-site', RelatedSiteController::class);
 
-    Route::get('categories/status/{id}',         [CategoryController::class, 'changeStatus'])->name('categories.changeStatus');
+    Route::get('categories/status/{category:id}',         [CategoryController::class, 'changeStatus'])->name('categories.changeStatus');
     Route::get('posts/status/{id}',              [PostController::class, 'changeStatus'])->name('posts.changeStatus');
     Route::get('posts/comment/delete/{id}',      [PostController::class, 'deleteComment'])->name('posts.deleteComment');
     Route::post('posts/image/delete/{image_id}', [PostController::class,  'deletePostImage'])->name('posts.image.delete');
-    Route::get('users/status/{id}',              [UserController::class, 'changeStatus'])->name('users.changeStatus')->middleware('can:users');;
-    Route::get('admins/status/{id}',             [AdminController::class, 'changeStatus'])->name('admins.changeStatus');
+    Route::get('users/status/{user:id}',              [UserController::class, 'changeStatus'])->name('users.changeStatus')
+    ->middleware('can:users');
+    Route::get('admins/status/{uder:id}',             [AdminController::class, 'changeStatus'])->name('admins.changeStatus');
 
     //******************** Profile Routes **************************
     Route::controller(ProfileController::class)->prefix('profile')->as('profile.')->group(function () {

@@ -8,7 +8,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('can:home');
+        $this->middleware('can:home');
     }
 
     public function index()

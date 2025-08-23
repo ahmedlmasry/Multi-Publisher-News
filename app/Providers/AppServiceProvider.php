@@ -11,6 +11,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -44,6 +45,11 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         $this->configureRateLimiter();
+        foreach(config('authorization.permissions') as $config_permission=>$value){
+            Gate::define($config_permission , function($auth) use($config_permission){
+                return $auth->hasAccess($config_permission);
+            });
+        }
     }
 
     protected function configureRateLimiter()

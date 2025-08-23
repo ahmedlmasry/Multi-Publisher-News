@@ -5,22 +5,21 @@ namespace App\Http\Controllers\Admin\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\RouteServiceProvider;
 
 class LoginController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware(['guest:admin'])->only(['showLoginForm', 'checkAuth']);
+        $this->middleware(['guest:admin'])->only(['showLoginForm', 'checkAuth']);
         $this->middleware(['auth:admin'])->only(['logout']);
     }
     public function showLoginForm()
     {
-        // dd('ok');
         return view('admin.auth.login');
     }
     public function checkAuth(Request $request)
     {
+        // reset($request->all());
         $request->validate($this->filterData());
 
         if (Auth::guard('admin')->attempt([
@@ -28,15 +27,17 @@ class LoginController extends Controller
             'password' => $request->password
         ], $request->remember)) {
             // if admin has permession home -> redirect to home , else redire the first page in his permessions
-            // $permessions = Auth::guard('admin')->user()->authorization->permessions;
-            // dd($permessions);
-            // $first_permession = $permessions[0];
+            $permissions = Auth::guard('admin')->user()->authorization->permissions;
+            $first_permession = $permissions[0];
 
-            // if (!in_array('home', $permessions)) {
-            //     return redirect()->intended('admin/' . $first_permession);
-            // }
-            // return redirect()->intended(RouteServiceProvider::AdminHome);
-            return redirect()->to('admin/home');
+            if (!in_array('home', $permissions)) {
+                // return $permissions;
+                // return redirect()->route('admin.home');
+                return redirect()->intended('admin/' . $first_permession);
+            }
+            return redirect()->intended('admin/'. $first_permession);
+            // return redirect()->route('admin.home');
+
         }
         return redirect()->back()->withErrors(['email' => 'credentials dose not match!']);
     }

@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('can:users');
+        $this->middleware('can:users');
     }
     public function index()
     {
@@ -46,7 +46,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $request->validated();
         try {
             DB::beginTransaction();
             $request->merge([
@@ -68,20 +67,15 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        $user = User::findOrFail($id);
-        return view('admin.users.show' , compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-
-
-    }
+    public function edit(string $id) {}
 
     /**
      * Update the specified resource in storage.
@@ -94,10 +88,8 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(User $user)
     {
-
-        $user = User::findOrFail($id);
         ImageManger::deleteImageFromLocal($user->image);
         $user->delete();
 
@@ -105,10 +97,8 @@ class UserController extends Controller
         return redirect()->route('admin.users.index');
     }
 
-    public function changeStatus($id)
+    public function changeStatus(User $user)
     {
-        $user = User::findOrFail($id);
-
         if ($user->status == 1) {
             $user->update([
                 'status' => 0,

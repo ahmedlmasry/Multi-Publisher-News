@@ -29,10 +29,10 @@
 
 
                 <div class="row">
-                    @foreach (config('authorization.permessions') as  $key=>$value)
+                    @foreach (config('authorization.permissions') as  $key=>$value)
                     <div class="col-4">
                         <div class="form-group">
-                                {{ $value }} : <input value="{{ $key }}" type="checkbox" name="permessions[]">
+                                {{ $value }} : <input value="{{ $key }}" type="checkbox" name="permissions[]">
                         </div>
                     </div>
                     @endforeach

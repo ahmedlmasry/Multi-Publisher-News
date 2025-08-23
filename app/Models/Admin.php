@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Admin extends Authenticatable
 {
-    use HasFactory , Notifiable;
+    use HasFactory, Notifiable;
     protected $guarded = [];
 
     // protected $fillable = ['id' , 'name' , 'username' , 'email' , 'password'];
@@ -24,33 +24,37 @@ class Admin extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany(Post::class , 'admin_id');
+        return $this->hasMany(Post::class, 'admin_id');
     }
 
     public function authorization()
     {
-        return $this->belongsTo(Authorization::class , 'role_id');
+        return $this->belongsTo(Authorization::class, 'role_id');
     }
 
-    public function hasAccess($config_permession)  // products , users , admins
+    public function hasAccess($config_permission)
     {
+        $authorization = $this->authorization; // This gets the related model instance
 
-        $authorizations = $this->authorization;
-
-        if(!$authorizations){
+        if (!$authorization) {
             return false;
         }
 
-        foreach($authorizations->permessions as $permession){
-            if($config_permession == $permession ?? false){
-                  return true;
-            }
+        // Get permissions and ensure it's an array
+        $permissions = $authorization->permissions;
+        if (!is_array($permissions)) {
+            $permissions = json_decode(json_encode($permissions), true) ?: [];
+        }
+        
+        if (empty($permissions)) {
+            return false;
         }
 
+        return in_array($config_permission, $permissions);
     }
 
     public function receivesBroadcastNotificationsOn(): string
     {
-        return 'admins.'.$this->id;
+        return 'admins.' . $this->id;
     }
 }

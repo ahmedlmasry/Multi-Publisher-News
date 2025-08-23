@@ -10,9 +10,9 @@ class Authorization extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function getpermessionsAttribute($permessions)
+    public function getPermissionsAttribute($permissions)
     {
-        return json_decode($permessions);
+        return json_decode($permissions);
     }
     public function admins()
     {

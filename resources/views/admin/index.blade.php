@@ -30,7 +30,7 @@
     </div>
 
     <!--Posts && Comments Row -->
-    <@livewire('admin.latest-posts-comments'))
+    @livewire('admin.latest-posts-comments')
 
 </div>
 @endsection

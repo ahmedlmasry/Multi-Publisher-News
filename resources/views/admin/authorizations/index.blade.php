@@ -1,10 +1,10 @@
 @extends('layouts.dashboard.app')
 @section('title')
-    Users
+Users
 @endsection
 @section('body')
-   <!-- Begin Page Content -->
-   <div class="container-fluid">
+<!-- Begin Page Content -->
+<div class="container-fluid">
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Roles Managment</h1>
@@ -25,7 +25,7 @@
                         <tr>
                             <th>#</th>
                             <th>Role Name</th>
-                            <th>Permessions</th>
+                            <th>permissions</th>
                             <th>Related Admins</th>
                             <th>Created At</th>
                             <th>Actions</th>
@@ -35,39 +35,43 @@
                         <tr>
                             <th>#</th>
                             <th>Role Name</th>
-                            <th>Permessions</th>
+                            <th>permissions</th>
                             <th>Related Admins</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                     @forelse ($authorizations as $authorization)
-                     <tr>
-                        <td>{{$loop->iteration }}</td>
-                        <td>{{$authorization->role }}</td>
-                        <td>
-                            @foreach ($authorization->permessions as $permession)
-                                  {{  $permession }},
-                            @endforeach
-                        </td>
-                        <td>{{ $authorization->admins->count() }}</td>
-                        <td>{{$authorization->created_at->format('Y-m-d h:m a')}}</td>
-                        <td>
-                            <a href="javascript:void(0)" onclick="if(confirm('Do you want to delete this Role')){document.getElementById('delete_role_{{ $authorization->id }}').submit()} return false"><i class="fa fa-trash"></i></a>
-                            <a href="{{ route('admin.authorizations.edit' , $authorization->id) }}" ><i class="fa fa-edit"></i></a>
-                        </td>
-                     </tr>
+                        @forelse ($authorizations as $authorization)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $authorization->role }}</td>
+                            <td>
+                                @if(is_array($authorization->permissions) || is_object($authorization->permissions))
+                                @foreach ($authorization->permissions as $permission)
+                                {{ $permission }},
+                                @endforeach
+                                @else
+                                <span class="text-muted">No permissions</span>
+                                @endif
+                            </td>
+                            <td>{{ $authorization->admins->count() }}</td>
+                            <td>{{ $authorization->created_at->format('Y-m-d h:m a') }}</td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="if(confirm('Do you want to delete this Role')){document.getElementById('delete_role_{{ $authorization->id }}').submit()} return false"><i class="fa fa-trash"></i></a>
+                                <a href="{{ route('admin.authorizations.edit', $authorization->id) }}"><i class="fa fa-edit"></i></a>
+                            </td>
+                        </tr>
 
-                     <form id="delete_role_{{$authorization->id}}" action="{{ route('admin.authorizations.destroy' , $authorization->id) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                     </form>
-                     @empty
-                         <tr>
-                            <td class="alert alert-info" colspan="5"> No authorizations</td>
-                         </tr>
-                     @endforelse
+                        <form id="delete_role_{{ $authorization->id }}" action="{{ route('admin.authorizations.destroy', $authorization->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                        @empty
+                        <tr>
+                            <td class="alert alert-info" colspan="5">No authorizations</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 {{ $authorizations->appends(request()->input())->links() }}

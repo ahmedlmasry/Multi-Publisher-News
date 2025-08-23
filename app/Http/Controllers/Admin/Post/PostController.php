@@ -84,22 +84,18 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($id);
         return view('admin.posts.edit' , compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostRequest $request, string $id)
+    public function update(PostRequest $request,Post $post)
     {
-        $request->validated();
-
         try{
             DB::beginTransaction();
-            $post = Post::findOrFail($id);
             $post->update($request->except(['images', '_token']));
 
             if ($request->hasFile('images')) {
@@ -154,9 +150,8 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        $post = Post::findOrFail($id);
         ImageManger::deleteImages($post);
         $post->delete();
 

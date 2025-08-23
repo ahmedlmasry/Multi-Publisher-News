@@ -15,11 +15,11 @@ class AuthorizationController extends Controller
     public function __construct()
     {
         $this->middleware('can:authorizations');
-        
+
     }
     public function index()
     {
-        $authorizations = Authorization::paginate(5);
+        $authorizations = Authorization::paginate(2);
         return view('admin.authorizations.index' , compact('authorizations'));
 
     }
@@ -37,6 +37,7 @@ class AuthorizationController extends Controller
      */
     public function store(AuthorizationRequest $request)
     {
+        // return $request;
         $authorization = new Authorization();
         $this->roles($request , $authorization);
         return redirect()->back()->with('success' , 'Role Created Successfully!');
@@ -94,7 +95,7 @@ class AuthorizationController extends Controller
     private function roles($request , $authorization)
     {
         $authorization->role = $request->role;
-        $authorization->permessions = json_encode($request->permessions);
+        $authorization->permissions = json_encode($request->permissions);
         $authorization->save();
     }
 }

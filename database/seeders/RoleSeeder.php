@@ -13,28 +13,14 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $perms = [
-            'posts'           =>' Management Posts',
-            'categories'      =>' Management Categories',
-            'settings'        =>' Management Settings',
-            'users'           =>' Management Users',
-            'admins'          =>' Management Admins',
-            'contacts'        =>' Management Contacts',
-            'home'            =>' Management Home Page',
-            'authorizations'  =>' Management Authorizations',
-            'profile'         => 'Management Profile',
-            'notifications'   => 'Management Notifications',
-        ];
-       $permissions = [];
-
-        foreach($perms as $permission=>$value){
-            $permessions[] = $permission;
-
+        $permessions = [];
+        foreach(config('authorization.permessions') as $permession=>$value){
+            $permessions[] = $permession;
         }
+
         Authorization::create([
             'role'=>'Manager',
-            'permissions'=>json_encode($permissions),
+            'permissions'=>json_encode($permessions),
         ]);
-
     }
 }
