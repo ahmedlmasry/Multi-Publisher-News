@@ -57,8 +57,7 @@ class LoginController extends Controller
     }
     protected function authenticated(Request $request, $user)
     {
-        Session::flash('success' , 'You Login Successfully!');
-        return redirect()->route('frontend.index');
+        return redirect()->route('frontend.index')->with('success', 'You Login Successfully!');
     }
 
     // logout

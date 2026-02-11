@@ -33,20 +33,26 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrap();
 
-        $setting = Setting::first();
-        $setting->whatsapp = "https://wa.me/" . $setting->phone;
-        $relatedSites = RelatedNewsSite::select('name', 'url')->get();
-        $categories = Category::active()->select('id', 'slug', 'name')->get();
+        try {
+            $setting = Setting::first();
+            if ($setting) {
+                $setting->whatsapp = "https://wa.me/" . $setting->phone;
+            }
+            $relatedSites = RelatedNewsSite::select('name', 'url')->get();
+            $categories = Category::active()->select('id', 'slug', 'name')->get();
 
-        view()->share([
-            'setting' => $setting,
-            'relatedSites' => $relatedSites,
-            'categories' => $categories
-        ]);
+            view()->share([
+                'setting' => $setting,
+                'relatedSites' => $relatedSites,
+                'categories' => $categories
+            ]);
+        } catch (\Exception $e) {
+            // Database tables may not exist yet (e.g., during testing or migrations)
+        }
 
         $this->configureRateLimiter();
-        foreach(config('authorization.permissions') as $config_permission=>$value){
-            Gate::define($config_permission , function($auth) use($config_permission){
+        foreach (config('authorization.permissions') as $config_permission => $value) {
+            Gate::define($config_permission, function ($auth) use ($config_permission) {
                 return $auth->hasAccess($config_permission);
             });
         }

@@ -22,9 +22,21 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return  [
-            'current_password'=>['required'],
-            'password'=>['required' ,'min:8', 'confirmed'],
+            'current_password'=>['required','current_password:web'],
+            'password'=>['required' ,'min:8','max:60', 'confirmed'],
             'password_confirmation'=>['required'],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'current_password.required' => 'Current password is required',
+            'current_password.current_password' => 'Current password is wrong',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 8 characters long',
+            'password.max' => 'Password must be at most 60 characters long',
+            'password.confirmed' => 'Password confirmation does not match',
+            'password_confirmation.required' => 'Password confirmation is required',
         ];
     }
 }

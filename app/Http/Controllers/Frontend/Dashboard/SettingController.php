@@ -23,17 +23,17 @@ class SettingController extends Controller
         unset($data['image']);
         $user->update($data);
         ImageManger::uploadImages($request, null, $user);
-        return redirect()->back()->with('success', 'Profile Updated Successfully!');
+        return redirect()->route('frontend.dashboard.setting')->with('Success', 'Profile Updated Successfully!');
     }
 
     public function changePassword(ChangePasswordRequest $request)
     {
         $user = auth()->user();
         if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->back()->with('error', 'Password dose not match !');
+            return  redirect('/account/setting')->with('error', 'Password dose not match !');
         }
         $user->update(['password' => $request->password]);
-        return redirect()->back()->with('success', 'Your Password Changed successfully!');
+        return redirect('/account/setting')->with('Success', 'Your Password Changed Successfully!');
     }
 
 }

@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app',['active'=>'account'])
+@extends('layouts.frontend.app', ['active' => 'account'])
 @section('title')
     Profile
 @endsection
@@ -6,7 +6,7 @@
     <!-- Profile Start -->
     <div class="dashboard container">
         <!-- Sidebar -->
-        @include('frontend.dashboard._sidebar' , ['profile_active'=>'active'])
+        @include('frontend.dashboard._sidebar', ['profile_active' => 'active'])
         <!-- Main Content -->
         <div class="main-content">
             <!-- Profile Section -->
@@ -14,7 +14,7 @@
                 <h2>User Profile</h2>
                 <div class="user-profile mb-3">
                     <img src="{{ asset(Auth::guard('web')->user()->image) }}" alt="User Image"
-                         class="profile-img rounded-circle" style="width: 100px; height: 100px;"/>
+                        class="profile-img rounded-circle" style="width: 100px; height: 100px;" />
                     <span class="username"> {{ Auth::guard('web')->user()->name }}</span>
                 </div>
                 <br>
@@ -33,15 +33,15 @@
                         <div class="post-form p-3 border rounded">
                             <!-- Post Title -->
                             <input name="title" type="text" id="postTitle" class="form-control mb-2"
-                                   placeholder="Post Title"/>
+                                placeholder="Post Title" />
                             <!-- Post Content -->
                             <textarea name="small_desc" class="form-control mb-2" rows="3"
-                                      placeholder="Enter Small Description"></textarea>
+                                placeholder="Enter Small Description"></textarea>
                             <textarea name="desc" id="postContent" class="form-control mb-2" rows="3"
-                                      placeholder="What's on your mind?"></textarea>
+                                placeholder="What's on your mind?"></textarea>
                             <!-- Image Upload -->
                             <input name="images[]" type="file" id="postImage" class="form-control mb-2" accept="image/*"
-                                   multiple/>
+                                multiple />
                             <div class="tn-slider mb-2">
                                 <div id="imagePreview" class="slick-slider"></div>
                             </div>
@@ -54,10 +54,10 @@
                             </select><br>
                             <!-- Enable Comments Checkbox -->
                             <label class="lable">
-                                Enable Comments : <input name="comment_able" type="checkbox" class=""/>
+                                Enable Comments : <input name="comment_able" type="checkbox" class="" />
                             </label><br>
                             <!-- Post Button -->
-                            <button type="submit" class="btn btn-primary post-btn">Post</button>
+                            <button type="submit" id="postButton" class="btn btn-primary post-btn">Post</button>
                         </div>
                     </section>
                 </form>
@@ -71,7 +71,7 @@
                             <div class="post-item mb-4 p-3 border rounded">
                                 <div class="post-header d-flex align-items-center mb-2">
                                     <img src="{{ asset('default.jpg') }}" alt="User Image" class="rounded-circle"
-                                         style="width: 50px; height: 50px;"/>
+                                        style="width: 50px; height: 50px;" />
                                     <div class="ms-3">
                                         <h5 class="mb-0">{{ auth()->user()->name }} </h5>
                                     </div>
@@ -88,8 +88,7 @@
                                     <div class="carousel-inner">
                                         @foreach ($post->images as $image)
                                             <div class="carousel-item @if ($loop->index == 0) active @endif ">
-                                                <img src="{{ asset($image->path) }}" class="d-block w-100"
-                                                     alt="First Slide">
+                                                <img src="{{ asset($image->path) }}" class="d-block w-100" alt="First Slide">
                                                 <div class="carousel-caption d-none d-md-block">
                                                     <h5>{{ $post->title }}</h5>
                                                 </div>
@@ -97,13 +96,11 @@
                                         @endforeach
                                         <!-- Add more carousel-item blocks for additional slides -->
                                     </div>
-                                    <a class="carousel-control-prev" href="#newsCarousel" role="button"
-                                       data-slide="prev">
+                                    <a class="carousel-control-prev" href="#newsCarousel" role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="sr-only">Previous</span>
                                     </a>
-                                    <a class="carousel-control-next" href="#newsCarousel" role="button"
-                                       data-slide="next">
+                                    <a class="carousel-control-next" href="#newsCarousel" role="button" data-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="sr-only">Next</span>
                                     </a>
@@ -117,31 +114,28 @@
                                         </span>
                                     </div>
                                     <div>
-                                        <a
-                                            href="{{ route('frontend.dashboard.post.edit', $post->slug) }}"
+                                        <a href="{{ route('frontend.dashboard.post.edit', $post->slug) }}"
                                             class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <a href="javascript:void(0)"
-                                           onclick="if(confirm('Are U Sure To Delete This Post?'))
-                                           {getElementById('deleteForm_{{ $post->id }}').submit()} return false"
-                                           class="btn btn-sm btn-outline-primary">
+                                        <a href="javascript:void(0)" onclick="if(confirm('Are U Sure To Delete This Post?'))
+                                                   {getElementById('deleteForm_{{ $post->id }}').submit()} return false"
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-trash"></i> Delete
                                         </a>
 
-                                        <button id="commentbtn_{{ $post->id }}" class="getComments"
-                                                post-id="{{ $post->id }}"
-                                                class="btn btn-sm btn-outline-secondary">
+                                        <button id="commentbtn_{{ $post->id }}" class="getComments" post-id="{{ $post->id }}"
+                                            class="btn btn-sm btn-outline-secondary">
                                             <i class="fas fa-comment"></i> Comments
                                         </button>
 
                                         <button id="hideCommentId_{{ $post->id }}" class="hideComments"
-                                                post-id="{{ $post->id }}"
-                                                class="btn btn-sm btn-outline-secondary" style="display: none">
+                                            post-id="{{ $post->id }}" class="btn btn-sm btn-outline-secondary"
+                                            style="display: none">
                                             <i class="fas fa-comment"></i> Hide Comments
                                         </button>
                                         <form id="deleteForm_{{ $post->id }}"
-                                              action="{{ route('frontend.dashboard.post.delete') }}" method="post">
+                                            action="{{ route('frontend.dashboard.post.delete') }}" method="post">
                                             @csrf
                                             @method('DELETE')
                                             <input name="slug" value="{{ $post->slug }}" hidden>
@@ -197,12 +191,12 @@
 
                     $.each(response.data, function (indexInArray, comment) {
                         $('#displayComments_' + post_id).append(`<div class="comment">
-                                        <img src="${comment.user.image}" alt="User Image" class="comment-img" />
-                                        <div class="comment-content">
-                                            <span class="username">${comment.user.name}</span>
-                                            <p class="comment-text">${comment.comment}</p>
-                                        </div>
-                                    </div>`).show();
+                                            <img src="${comment.user.image}" alt="User Image" class="comment-img" />
+                                            <div class="comment-content">
+                                                <span class="username">${comment.user.name}</span>
+                                                <p class="comment-text">${comment.comment}</p>
+                                            </div>
+                                        </div>`).show();
                     });
                     $('#commentbtn_' + post_id).hide();
                     $('#hideCommentId_' + post_id).show();

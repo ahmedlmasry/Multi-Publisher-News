@@ -47,7 +47,7 @@ Route::group(['as' => 'frontend.'], function () {
         // setting routes
         Route::prefix('setting')->controller(SettingController::class)->group(function () {
             Route::get('/', 'index')->name('setting');
-            Route::post('/update', 'update')->name('setting.update');
+            Route::put('/', 'update')->name('setting.update');
             Route::post('/change-password', 'changePassword')->name('setting.changePassword');
         });
         // Notification Routes
@@ -70,4 +70,4 @@ Route::prefix('email')->name('verification.')->controller(VerificationController
 
 Auth::routes();
 
-require __DIR__.'../admin.php';
+require __DIR__ . '../admin.php';
